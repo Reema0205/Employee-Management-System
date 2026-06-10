@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Employee System</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #1a1a2e;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 28px 16px;
+    }
+
+    .page {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 1060px;
+      min-height: 80vh;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+
+    .page-header {
+      background: #dbeafe;
+      padding: 18px 36px;
+      text-align: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #1e40af;
+      text-transform: uppercase;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      padding: 20px 36px;
+      flex-wrap: wrap;
+      align-items: center;
+      border-bottom: 1px solid #e2e6ea;
+    }
+
+    .controls input,
+    .controls select {
+      border: 1px solid #e2e6ea;
+      color: #1e293b;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+    }
+
+    .controls input { width: 220px; }
+    .controls select { min-width: 160px; }
+    .controls .spacer { flex: 1; }
+
+    .btn {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary { background: #3b9eff; color: #fff; }
+    .btn-save    { background: #22c55e; color: #fff; }
+    .btn-cancel  { background: #f1f3f5; color: #1e293b; border: 1px solid #e2e6ea; }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .icon-view:hover   { background: #dbeafe; }
+    .icon-edit:hover   { background: #fef3c7; }
+    .icon-delete:hover { background: #fee2e2; }
+
+    .table-wrap { padding: 0 36px 36px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin-top: 20px;
+    }
+
+    thead { background: #f1f3f5; }
+
+    thead th {
+      padding: 13px 16px;
+      text-align: left;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #64748b;
+      border-bottom: 1px solid #e2e6ea;
+    }
+
+    tbody tr { border-bottom: 1px solid #e2e6ea; }
+    tbody tr:hover { background: #f8f9ff; }
+    tbody td { padding: 14px 16px; color: #1e293b; }
+
+    .emp-id   { font-weight: 600; color: #334155; font-size: 0.82rem; }
+    .emp-name { font-weight: 600; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .badge-active   { color: #16a34a; background: #dcfce7; }
+    .badge-inactive { color: #dc2626; background: #fee2e2; }
+
+    .actions-cell { display: flex; gap: 4px; align-items: center; }
+
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-bg.open { display: flex; }
+
+    .modal-box {
+      background: #fff;
+      border: 1px solid #e2e6ea;
+      border-radius: 14px;
+      padding: 28px 30px;
+      width: 460px;
+      max-width: 95vw;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    .modal-box h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #1e293b;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      background: #f8fafc;
+      border: 1px solid #e2e6ea;
+      color: #1e293b;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .view-box {
+      background: #fff;
+      border-radius: 14px;
+      padding: 28px 30px;
+      width: 420px;
+      max-width: 95vw;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    .view-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .view-avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #3b9eff;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .view-name { font-size: 1rem; font-weight: 700; color: #1e293b; }
+    .view-role { font-size: 0.82rem; color: #64748b; margin-top: 2px; }
+
+    .view-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #e2e6ea;
+      font-size: 0.88rem;
+    }
+
+    .view-row:last-child { border-bottom: none; }
+    .view-row span:first-child { color: #64748b; font-weight: 500; }
+    .view-row span:last-child  { color: #1e293b; font-weight: 600; }
+
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #22c55e;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 999;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.red  { background: #ef4444; }
+
+    .empty-row td {
+      text-align: center;
+      padding: 40px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="page-header">Employee Page</div>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Search by name or ID" oninput="loadEmployees()"/>
+    <select id="deptFilter" onchange="loadEmployees()">
+      <option value="">All Departments</option>
+      <option>IT</option>
+      <option>HR</option>
+      <option>Finance</option>
+      <option>Marketing</option>
+    </select>
+    <select id="statusFilter" onchange="loadEmployees()">
+      <option value="">All Status</option>
+      <option>Active</option>
+      <option>Inactive</option>
+    </select>
+    <div class="spacer"></div>
+    <button class="btn btn-primary" onclick="openAddModal()">+ Add Employee</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Department</th>
+          <th>Salary</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="modal-bg" id="formModal">
+  <div class="modal-box">
+    <h2 id="formTitle">Add Employee</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Employee ID</label>
+        <input type="text" id="fId" placeholder="EMP001"/>
+      </div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="fName" placeholder="John Doe"/>
+      </div>
+      <div class="form-group">
+        <label>Role</label>
+        <input type="text" id="fRole" placeholder="Software Engineer"/>
+      </div>
+      <div class="form-group">
+        <label>Department</label>
+        <select id="fDept">
+          <option>IT</option>
+          <option>HR</option>
+          <option>Finance</option>
+          <option>Marketing</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Salary (Rs.)</label>
+        <input type="number" id="fSalary" placeholder="50000"/>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="fStatus">
+          <option>Active</option>
+          <option>Inactive</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Email</label>
+        <input type="email" id="fEmail" placeholder="john@company.com"/>
+      </div>
+      <div class="form-group full">
+        <label>Phone</label>
+        <input type="text" id="fPhone" placeholder="0771234567"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeFormModal()">Cancel</button>
+      <button class="btn btn-save"   onclick="saveEmployee()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="viewModal">
+  <div class="view-box">
+    <div class="view-header">
+      <div class="view-avatar" id="vAvatar"></div>
+      <div>
+        <div class="view-name" id="vName"></div>
+        <div class="view-role" id="vRole"></div>
+      </div>
+    </div>
+    <div class="view-row"><span>Employee ID</span> <span id="vId"></span></div>
+    <div class="view-row"><span>Department</span>  <span id="vDept"></span></div>
+    <div class="view-row"><span>Salary</span>      <span id="vSalary"></span></div>
+    <div class="view-row"><span>Email</span>       <span id="vEmail"></span></div>
+    <div class="view-row"><span>Phone</span>       <span id="vPhone"></span></div>
+    <div class="view-row"><span>Status</span>      <span id="vStatus"></span></div>
+    <div class="modal-footer" style="margin-top:16px">
+      <button class="btn btn-cancel" onclick="closeViewModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = "api.php";
+  let editingId = null;
+
+  function loadEmployees() {
+    const search = document.getElementById('searchInput').value.trim();
+    const dept   = document.getElementById('deptFilter').value;
+    const status = document.getElementById('statusFilter').value;
+
+    let url = API + "?action=getAll";
+    if (search) url += "&search=" + encodeURIComponent(search);
+    if (dept)   url += "&dept="   + encodeURIComponent(dept);
+    if (status) url += "&status=" + encodeURIComponent(status);
+
+    fetch(url)
+      .then(function(res) { return res.json(); })
+      .then(function(data) { renderTable(data); })
+      .catch(function() { showToast("Cannot connect to server!", true); });
+  }
+
+  function renderTable(employees) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    if (employees.length === 0) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No employees found</td></tr>';
+      return;
+    }
+
+    employees.forEach(function(emp) {
+      const badge = emp.status === 'Active'
+        ? '<span class="badge badge-active">Active</span>'
+        : '<span class="badge badge-inactive">Inactive</span>';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td class="emp-id">'  + emp.id      + '</td>' +
+        '<td class="emp-name">' + emp.name    + '</td>' +
+        '<td>'                  + emp.role    + '</td>' +
+        '<td>'                  + emp.dept    + '</td>' +
+        '<td>Rs.' + parseInt(emp.salary).toLocaleString() + '</td>' +
+        '<td>' + badge + '</td>' +
+        '<td><div class="actions-cell">' +
+          '<button class="icon-btn icon-view"   onclick="openViewModal(\'' + emp.id + '\')" title="View">👁</button>' +
+          '<button class="icon-btn icon-edit"   onclick="openEditModal(\'' + emp.id + '\')" title="Edit">✏️</button>' +
+          '<button class="icon-btn icon-delete" onclick="deleteEmployee(\'' + emp.id + '\')" title="Delete">🗑</button>' +
+        '</div></td>';
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  function openAddModal() {
+    editingId = null;
+    document.getElementById('formTitle').textContent = 'Add Employee';
+    document.getElementById('fId').value     = '';
+    document.getElementById('fName').value   = '';
+    document.getElementById('fRole').value   = '';
+    document.getElementById('fSalary').value = '';
+    document.getElementById('fEmail').value  = '';
+    document.getElementById('fPhone').value  = '';
+    document.getElementById('fStatus').value = 'Active';
+    document.getElementById('fId').disabled  = false;
+    document.getElementById('formModal').classList.add('open');
+  }
+
+  function closeFormModal() {
+    document.getElementById('formModal').classList.remove('open');
+  }
+
+  function saveEmployee() {
+    const id     = document.getElementById('fId').value.trim();
+    const name   = document.getElementById('fName').value.trim();
+    const role   = document.getElementById('fRole').value.trim();
+    const dept   = document.getElementById('fDept').value;
+    const salary = parseInt(document.getElementById('fSalary').value) || 0;
+    const status = document.getElementById('fStatus').value;
+    const email  = document.getElementById('fEmail').value.trim();
+    const phone  = document.getElementById('fPhone').value.trim();
+
+    if (!id || !name || !role) {
+      showToast('ID, Name and Role are required!', true);
+      return;
+    }
+
+    const action = editingId ? 'update' : 'add';
+
+    fetch(API + "?action=" + action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: id, name: name, role: role, dept: dept, salary: salary, status: status, email: email, phone: phone })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(result) {
+      if (result.success) {
+        showToast(editingId ? 'Employee updated!' : 'Employee added!');
+        closeFormModal();
+        loadEmployees();
+      } else {
+        showToast(result.message || 'Error saving!', true);
+      }
+    })
+    .catch(function() { showToast('Server error!', true); });
+  }
+
+  function openEditModal(empId) {
+    fetch(API + "?action=getAll")
+      .then(function(res) { return res.json(); })
+      .then(function(employees) {
+        var emp = null;
+        for (var i = 0; i < employees.length; i++) {
+          if (employees[i].id === empId) { emp = employees[i]; break; }
+        }
+        if (!emp) return;
+
+        editingId = empId;
+        document.getElementById('formTitle').textContent = 'Edit Employee';
+        document.getElementById('fId').value     = emp.id;
+        document.getElementById('fId').disabled  = true;
+        document.getElementById('fName').value   = emp.name;
+        document.getElementById('fRole').value   = emp.role;
+        document.getElementById('fDept').value   = emp.dept;
+        document.getElementById('fSalary').value = emp.salary;
+        document.getElementById('fStatus').value = emp.status;
+        document.getElementById('fEmail').value  = emp.email || '';
+        document.getElementById('fPhone').value  = emp.phone || '';
+        document.getElementById('formModal').classList.add('open');
+      });
+  }
+
+  function openViewModal(empId) {
+    fetch(API + "?action=getAll")
+      .then(function(res) { return res.json(); })
+      .then(function(employees) {
+        var emp = null;
+        for (var i = 0; i < employees.length; i++) {
+          if (employees[i].id === empId) { emp = employees[i]; break; }
+        }
+        if (!emp) return;
+
+        document.getElementById('vAvatar').textContent = emp.name.charAt(0).toUpperCase();
+        document.getElementById('vName').textContent   = emp.name;
+        document.getElementById('vRole').textContent   = emp.role;
+        document.getElementById('vId').textContent     = emp.id;
+        document.getElementById('vDept').textContent   = emp.dept;
+        document.getElementById('vSalary').textContent = 'Rs. ' + parseInt(emp.salary).toLocaleString();
+        document.getElementById('vEmail').textContent  = emp.email || '-';
+        document.getElementById('vPhone').textContent  = emp.phone || '-';
+        document.getElementById('vStatus').innerHTML   = emp.status === 'Active'
+          ? '<span class="badge badge-active">Active</span>'
+          : '<span class="badge badge-inactive">Inactive</span>';
+
+        document.getElementById('viewModal').classList.add('open');
+      });
+  }
+
+  function closeViewModal() {
+    document.getElementById('viewModal').classList.remove('open');
+  }
+
+  function deleteEmployee(empId) {
+    if (!confirm('Delete employee ' + empId + '?')) return;
+
+    fetch(API + "?action=delete&id=" + empId)
+      .then(function(res) { return res.json(); })
+      .then(function(result) {
+        if (result.success) {
+          showToast('Employee deleted');
+          loadEmployees();
+        } else {
+          showToast('Delete failed!', true);
+        }
+      });
+  }
+
+  function showToast(msg, isRed) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isRed ? ' red' : '');
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 2800);
+  }
+
+  document.getElementById('formModal').addEventListener('click', function(e) {
+    if (e.target === e.currentTarget) closeFormModal();
+  });
+
+  document.getElementById('viewModal').addEventListener('click', function(e) {
+    if (e.target === e.currentTarget) closeViewModal();
+  });
+
+  loadEmployees();
+</script>
+</body>
+</html>
