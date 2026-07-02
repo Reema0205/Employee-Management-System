@@ -12,24 +12,14 @@
 
 body{
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
-    background:
-    linear-gradient(
-    135deg,
-    #e0f2fe 0%,
-    #dbeafe 50%,
-    #ffffff 100%);
-
     background-image:url('pic.jpeg');
-
+    background-size:cover;
+    background-position:center;
     min-height:100vh;
-
     display:flex;
     justify-content:center;
     align-items:center;
-
     padding:25px;
-
     backdrop-filter:blur(14px);
 }
 
@@ -49,28 +39,25 @@ body{
 }
 
 .logo .fa-users{
-    background:linear-gradient(
-    90deg,
-    #3b82f6 0%,
-    #f97316 50%,
-    #10b981 100%);
-
+    background:linear-gradient(90deg,#3b82f6 0%,#f97316 50%,#10b981 100%);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
     background-clip:text;
 }
 
 .logo-section h1{
-    color:darkblue;
+    color:white;
     font-size:28px;
     font-weight:700;
     letter-spacing:0.5px;
     margin-bottom:8px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 .subtitle{
-    color:black;
+    color:white;
     font-size:18px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 .register-card{
@@ -85,18 +72,13 @@ body{
 .user-icon{
     width:65px;
     height:65px;
-
     margin:auto;
     margin-bottom:25px;
-
     background:#eef4ff;
-
     border-radius:50%;
-
     display:flex;
     justify-content:center;
     align-items:center;
-
     font-size:40px;
     color:mediumblue;
 }
@@ -203,261 +185,138 @@ footer{
 }
 
 footer p{
-    color:black;
+    color:white;
     font-size:15px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 @media (max-width:480px){
-
     .register-card{
         padding:30px 25px;
     }
-
     .logo-section h1{
         font-size:18px;
     }
-
     .button-group{
         flex-direction:column;
     }
-
 }
 
 </style>
 
 <title>Employee Management System - Register</title>
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 </head>
 
 <body>
 
 <div class="container">
-   <div class="logo-section">
-   <div class="logo">
+    <div class="logo-section">
+        <div class="logo">
             <i class="fas fa-users"></i>
-   </div>
+        </div>
         <h1><b>EMPLOYEE MANAGEMENT SYSTEM</b></h1>
         <p class="subtitle">Admin Registration</p>
+    </div>
 
-   </div>
-
-<div class="register-card">
-   <div class="user-icon">
+    <div class="register-card">
+        <div class="user-icon">
             <i class="fas fa-user-plus"></i>
-   </div>
+        </div>
 
-        <form id="registerForm">
+        <form id="registerForm" action="register_process.php" method="POST">
 
             <div class="form-group">
-               <label><b>Full Name</b></label>
-
+                <label><b>Full Name</b></label>
                 <div class="input-wrapper">
-
                     <i class="fas fa-user icon"></i>
-
-                    <input type="text"
-                    id="fullname"
-                    placeholder="Enter full name">
-
+                    <input type="text" id="fullname" name="fullname" placeholder="Enter full name">
                 </div>
-
             </div>
 
             <div class="form-group">
-
-                <label>
-                    <b>Username</b>
-                </label>
-
+                <label><b>Username</b></label>
                 <div class="input-wrapper">
-
                     <i class="fas fa-user icon"></i>
-
-                    <input type="text"
-                    id="username"
-                    placeholder="Enter username">
-
+                    <input type="text" id="username" name="username" placeholder="Enter username" autocomplete="off">
                 </div>
-
             </div>
 
             <div class="form-group">
-
-                <label>
-                    <b>Email</b>
-                </label>
-
+                <label><b>Email</b></label>
                 <div class="input-wrapper">
-
                     <i class="fas fa-envelope icon"></i>
-
-                    <input type="email"
-                    id="email"
-                    placeholder="Enter email address">
-
+                    <input type="email" id="email" name="email" placeholder="Enter email address">
                 </div>
-
             </div>
 
             <div class="form-group">
-
-                <label>
-                    <b>Password</b>
-                </label>
-
+                <label><b>Password</b></label>
                 <div class="input-wrapper">
-
                     <i class="fas fa-lock icon"></i>
-
-                    <input type="password"
-                    id="password"
-                    placeholder="Enter password">
-
+                    <input type="password" id="password" name="password" placeholder="Enter password" autocomplete="off">
                 </div>
-
             </div>
 
             <div class="form-group">
-
-                <label>
-                    <b>Confirm Password</b>
-                </label>
-
+                <label><b>Confirm Password</b></label>
                 <div class="input-wrapper">
-
                     <i class="fas fa-lock icon"></i>
-
-                    <input type="password"
-                    id="confirmPassword"
-                    placeholder="Confirm password">
-
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password">
                 </div>
-
             </div>
 
             <div class="form-options">
-
                 <label class="checkbox-label">
-
-                    <input type="checkbox"
-                    id="showPassword">
-
+                    <input type="checkbox" id="showPassword">
                     <span>Show Password</span>
-
                 </label>
-
             </div>
 
             <div class="form-group">
-
-                <label>
-                    <b>Role</b>
-                </label>
-
+                <label><b>Job Role</b></label>
                 <div class="input-wrapper">
-
                     <i class="fas fa-user-shield icon"></i>
-
-                    <select id="role">
-
-                        <option>Admin</option>
-                        <option>HR Manager</option>
-                        <option>Supervisor</option>
-
+                    <select id="role" name="role">
+                        <option>Designer</option>
+                        <option>Developer</option>
+                        <option>HR Officer</option>
+                        <option>Accountant</option>
+                        <option>Support</option>
                     </select>
-
                 </div>
-
             </div>
 
             <div class="button-group">
-
-                <button type="submit"
-                class="btn btn-register">
-                    <b>REGISTER</b>
-                </button>
-
-                <button type="button"
-                class="btn btn-clear"
-                id="clearBtn">
-                    <b>CLEAR</b>
-                </button>
-
+                <button type="submit" class="btn btn-register"><b>REGISTER</b></button>
+                <button type="button" class="btn btn-clear" id="clearBtn"><b>CLEAR</b></button>
             </div>
 
         </form>
-
     </div>
 
     <footer>
         <p>©️ 2026 EMS. All rights reserved.</p>
     </footer>
-
 </div>
 
 <script>
-
-document.getElementById('showPassword')
-.addEventListener('change', function(){
-
-    const passwordField =
-    document.getElementById('password');
-
-    const confirmField =
-    document.getElementById('confirmPassword');
-
-    passwordField.type =
-    this.checked ? 'text' : 'password';
-
-    confirmField.type =
-    this.checked ? 'text' : 'password';
-
+document.getElementById('showPassword').addEventListener('change', function(){
+    const passwordField = document.getElementById('password');
+    const confirmField = document.getElementById('confirmPassword');
+    passwordField.type = this.checked ? 'text' : 'password';
+    confirmField.type = this.checked ? 'text' : 'password';
 });
 
-document.getElementById('clearBtn')
-.addEventListener('click', function(){
-
+document.getElementById('clearBtn').addEventListener('click', function(){
     document.getElementById('fullname').value = '';
-
     document.getElementById('username').value = '';
-
     document.getElementById('email').value = '';
-
     document.getElementById('password').value = '';
-
     document.getElementById('confirmPassword').value = '';
-
     document.getElementById('fullname').focus();
-
 });
-
-document.getElementById('registerForm')
-.addEventListener('submit', function(e){
-
-    e.preventDefault();
-
-    const password =
-    document.getElementById('password').value;
-
-    const confirmPassword =
-    document.getElementById('confirmPassword').value;
-
-    if(password !== confirmPassword){
-
-        alert('Passwords do not match!');
-        return;
-
-    }
-
-    alert('Registration Successful!');
-
-    window.location.href = "login.html";
-
-});
-
 </script>
 
 </body>

@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
+
+    body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url('pic.jpeg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    backdrop-filter: blur(14px);
+    }
+
+    .container {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    }
+
+    .logo-section {
+    margin-bottom: 30px;
+    }
+
+    .logo {
+    font-size: 60px;
+    margin-bottom: 15px;
+    }
+
+        .logo .fa-users {
+            background: linear-gradient(90deg, #3b82f6 0%, #f97316 50%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+    .logo-section h1 {
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .subtitle {
+    color: white;
+    font-size: 18px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .login-card {
+    background: white;
+    border-radius: 12px;
+    padding: 35px 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    backdrop-filter:blur(10px);
+    }
+
+    .form-group {
+    margin-bottom: 20px;
+    }
+
+    .form-group label {
+    display: block;
+    color: #000000;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+    position: relative;
+    }
+
+    .input-wrapper .icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #000000;
+    font-size: 14px;
+    }
+
+    .input-wrapper input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+    background: #e8edf2;
+    transition: all 0.3s;
+    }
+
+    .input-wrapper input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-options {
+    margin-bottom: 25px;
+    }
+
+    .checkbox-label {
+    display: flex;
+    align-items: center;
+    color: #000000;
+    font-size: 16px;
+    cursor: pointer;
+    }
+
+    .checkbox-label input {
+    margin-right: 8px;
+    cursor: pointer;
+    }
+
+    .button-group {
+    display: flex;
+    gap: 12px;
+    }
+
+    .btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    }
+
+    .btn-login {
+    background-color: mediumblue;
+    color: white;
+    }
+
+    .btn-login:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .forgot-link {
+        font-size: 14px;
+        color: #1d6be9;
+        text-decoration: none;
+        font-weight: 500;
+        text-align:right;
+    }
+
+    .forgot-link:hover {
+        text-decoration: underline;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .create-account {
+        text-align: center;
+        font-size: 14px;
+        color: #64748b;
+    }
+
+    .create-account a {
+        color: #195fd0;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .create-account a:hover {
+        text-decoration: underline;
+    }
+
+    .btn-clear {
+    background-color: lightgray;
+    color: black;
+    }
+
+    .btn-clear:hover {
+    background: #d1d5db;
+    }
+
+    footer {
+    margin-top: 25px;
+    }
+
+    footer p {
+    color: white;
+    font-size: 16px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 480px) {
+        .login-card {
+            padding: 25px 20px;
+        }
+
+        .logo-section h1 {
+            font-size: 18px;
+        }
+    }
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo-section">
+            <div class="logo">
+                <i class="fas fa-users"></i>
+            </div>
+            <h1><b>EMPLOYEE MANAGEMENT SYSTEM</b></h1>
+            <p class="subtitle">Please login to continue</p>
+        </div>
+
+        <div class="login-card">
+            <form id="loginForm" action="login_process.php" method="POST">
+                <div class="form-group">
+                    <label for="username"><b>Username</b></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user icon"></i>
+                        <input type="text" id="username" name="username" value="" placeholder="Enter username">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password"><b>Password</b></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock icon"></i>
+                        <input type="password" id="password" name="password" value="" placeholder="Enter password">
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="showPassword">
+                        <span>Show Password</span>
+                    </label>
+                    <a href="Reset.html" class="forgot-link">Forgot Password?</a>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-login"><b>LOGIN</b></button>
+                    <button type="button" class="btn btn-clear" id="clearBtn"><b>CLEAR</b></button>
+                </div>
+
+                <div class="create-account">
+                    Don't have an account? <a href="Register.html">Create Account</a>
+                </div>
+            </form>
+        </div>
+
+        <footer>
+            <p>© 2026 EMS. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('showPassword').addEventListener('change', function() {
+            const passwordField = document.getElementById('password');
+            passwordField.type = this.checked ? 'text' : 'password';
+        });
+
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('username').focus();
+        });
+    </script>
+</body>
+</html>

@@ -1,37 +1,36 @@
 <?php
-header('Content-Type: application/json');
+require 'config.php';
 
-$conn = new mysqli("localhost", "root", "", "ems");
+$username = $_POST['username'];
+$newPassword = $_POST['newPassword'];
+$confirmPassword = $_POST['confirmPassword'];
 
-if($conn->connect_error){
-    echo json_encode(['success' => false, 'message' => 'Database connection failed!']);
+if($newPassword !== $confirmPassword){
+    echo "<script>alert('Passwords do not match!'); window.location.href='Reset.html';</script>";
     exit;
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
-$username = $data['username'];
-$newPassword = password_hash($data['newPassword'], PASSWORD_DEFAULT);
-
 // Check if user exists
-$check = $conn->prepare("SELECT id FROM admins WHERE username = ? OR email = ?");
+$check = $connection->prepare("SELECT id FROM admins WHERE username = ? OR email = ?");
 $check->bind_param("ss", $username, $username);
 $check->execute();
 $check->store_result();
 
 if($check->num_rows === 0){
-    echo json_encode(['success' => false, 'message' => 'Username or Email not found!']);
+    echo "<script>alert('Username or Email not found!'); window.location.href='Reset.html';</script>";
     exit;
 }
 
 // Update password
-$stmt = $conn->prepare("UPDATE admins SET password = ? WHERE username = ? OR email = ?");
-$stmt->bind_param("sss", $newPassword, $username, $username);
+$hashed = password_hash($newPassword, PASSWORD_DEFAULT);
+$stmt = $connection->prepare("UPDATE admins SET password = ? WHERE username = ? OR email = ?");
+$stmt->bind_param("sss", $hashed, $username, $username);
 
 if($stmt->execute()){
-    echo json_encode(['success' => true]);
+    echo "<script>alert('Password reset successful!'); window.location.href='login.php';</script>";
 } else {
-    echo json_encode(['success' => false, 'message' => 'Failed to reset password!']);
+    echo "<script>alert('Failed to reset password!'); window.location.href='Reset.html';</script>";
 }
 
-$conn->close();
+$connection->close();
 ?>
