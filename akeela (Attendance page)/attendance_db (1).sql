@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 10, 2026 at 06:11 AM
+-- Generation Time: Jul 02, 2026 at 09:07 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,9 +42,7 @@ CREATE TABLE `attendance_records` (
 --
 
 INSERT INTO `attendance_records` (`id`, `emp_id`, `attendance_date`, `check_in`, `check_out`, `status`, `remarks`) VALUES
-(1, 'EM2', '2026-06-05', '10:39:09', '10:39:27', 'Present', 'Auto Checked Out via Dashboard'),
-(2, 'EM3', '2026-06-06', '17:34:41', '00:00:00', 'Late', 'Auto Checked In via Dashboard'),
-(3, 'EM4', '2026-06-07', '09:20:35', '00:00:00', 'Absent', 'Auto Checked In via Dashboard');
+(7, 'em10', '2026-06-12', '08:18:35', '00:00:00', 'Present', 'Auto Checked In via Dashboard');
 
 -- --------------------------------------------------------
 
@@ -66,10 +64,41 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`emp_id`, `name`, `age`, `email`, `phone`, `created_at`) VALUES
+('EM039', 'EM039', 12, 'hafeel9@gmail.com', '15828585269', '2026-06-10 05:23:54'),
 ('EM1', 'AKEELA', 21, 'akeefathi07@gmail.com', '0248756156459', '2026-06-05 08:36:56'),
+('em10', 'Akeela', 20, 'akeefathi07@gmail.com', '3456789', '2026-06-12 06:17:27'),
+('EM15', 'AKEELAk', 20, 'hafeel@gmail.com', '0767483453', '2026-06-10 05:31:33'),
 ('EM2', 'hafeel', 22, 'hafeel@gmail.com', '49179409', '2026-06-05 08:38:30'),
+('EM20', 'AFRATH', 25, 'hafeel9@gmail.com', '041840849', '2026-06-10 05:24:53'),
+('EM25', 'AKEELA', 55, 'hafeel@gmail.com', '9708342', '2026-06-10 05:33:07'),
 ('EM3', 'hafeel', 22, 'hafeel@gmail.com', '0767483453', '2026-06-06 15:33:21'),
-('EM4', 'AAQIL', 20, 'akeefathi07@gmail.com', '0767483453', '2026-06-07 07:18:58');
+('EM4', 'AAQIL', 20, 'akeefathi07@gmail.com', '0767483453', '2026-06-07 07:18:58'),
+('em5', 'Akeela', 20, 'akeefathi07@gmail.com', '23456', '2026-06-12 06:10:03'),
+('em7', 'Akeela', 20, 'akeefathi07@gmail.com', '1234567', '2026-06-12 06:07:16'),
+('em8', 'Akeela', 20, 'akeefathi07@gmail.com', '0771234555', '2026-06-11 15:58:28');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `performance_reviews`
+--
+
+CREATE TABLE `performance_reviews` (
+  `id` int(11) NOT NULL,
+  `employee_name` varchar(100) NOT NULL,
+  `review_period` varchar(20) NOT NULL,
+  `kpi_score` decimal(5,2) NOT NULL,
+  `reviewed_by` varchar(50) NOT NULL,
+  `feedback` text DEFAULT NULL,
+  `review_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `performance_reviews`
+--
+
+INSERT INTO `performance_reviews` (`id`, `employee_name`, `review_period`, `kpi_score`, `reviewed_by`, `feedback`, `review_date`) VALUES
+(1, 'hafeel', 'Q4 2025', 25.10, 'HR Manager', 'mn', '2026-07-01');
 
 --
 -- Indexes for dumped tables
@@ -89,6 +118,12 @@ ALTER TABLE `employees`
   ADD PRIMARY KEY (`emp_id`);
 
 --
+-- Indexes for table `performance_reviews`
+--
+ALTER TABLE `performance_reviews`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -96,7 +131,13 @@ ALTER TABLE `employees`
 -- AUTO_INCREMENT for table `attendance_records`
 --
 ALTER TABLE `attendance_records`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `performance_reviews`
+--
+ALTER TABLE `performance_reviews`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
