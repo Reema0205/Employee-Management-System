@@ -1,0 +1,82 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <title>Leave Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a href="../../index.php" style="position:fixed;top:14px;left:14px;z-index:9999;background:#1d4ed8;color:#fff;padding:8px 14px;border-radius:8px;font-family:sans-serif;font-size:14px;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.25);">⬅ Dashboard</a>
+
+<div class="container">
+    <h2>Leave Management System</h2>
+
+    <div class="form-box">
+        <div class="input-group">
+            <label>Employee ID</label>
+            <select id="empId">
+                <option value="">Select Employee</option>
+                <option value="Emp 001">Emp 001</option>
+                <option value="Emp 002">Emp 002</option>
+                <option value="Emp 003">Emp 003</option>
+                <option value="Emp 004">Emp 004</option>
+                <option value="Emp 005">Emp 005</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Leave Type</label>
+            <select id="leaveType">
+                <option value="">Select Leave</option>
+                <option>Annual Leave</option>
+                <option>Sick Leave</option>
+                <option>Casual Leave</option>
+                <option>Emergency Leave</option>
+                <option>Medical Leave</option>
+                <option>Other</option>
+
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Start Date</label>
+            <input type="date" id="startDate">
+        </div>
+
+        <div class="input-group">
+            <label>End Date</label>
+            <input type="date" id="endDate">
+        </div>
+
+        <div class="input-group full">
+            <label>Reason</label>
+            <textarea id="reason" rows="4"></textarea>
+        </div>
+    </div>
+
+    <div class="btn-box">
+        <button class="apply-btn" onclick="addLeave()">Apply Leave</button>
+        <button class="approve-btn" onclick="approveLeave()">Approve</button>
+        <button class="reject-btn" onclick="rejectLeave()">Reject</button>
+        <button class="save-btn" onclick="saveTableData()">Save</button>
+        <button class="delete-btn" onclick="deleteRow()">Delete</button>
+        <button class="clear-btn" onclick="clearTable()">Clear All</button>
+    </div>
+
+    <table id="leaveTable">
+        <tr>
+            <th>ID</th>
+            <th>Employee</th>
+            <th>Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Reason</th>
+            <th>Status</th>
+        </tr>
+    </table>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

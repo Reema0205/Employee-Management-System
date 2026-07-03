@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payroll System</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+      --bg:       #1a1a2e;
+      --surface:  #ffffff;
+      --table-hd: #f1f3f5;
+      --row-hover:#f8f9ff;
+      --border:   #e2e6ea;
+      --accent:   #3b9eff;
+      --danger:   #ef4444;
+      --warn:     #f59e0b;
+      --text:     #1e293b;
+      --muted:    #64748b;
+      --total-bg: #f8fafc;
+      --radius:   10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 28px 16px;
+    }
+
+    .page {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 32px 36px;
+      width: 100%;
+      max-width: 1060px;
+      min-height: 80vh;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+    }
+
+    h1 { font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 28px; }
+
+    .controls {
+      display: flex; gap: 12px; margin-bottom: 28px;
+      flex-wrap: wrap; align-items: center;
+    }
+    .controls input,
+    .controls select {
+      background: #fff; border: 1px solid var(--border);
+      color: var(--text); padding: 9px 14px;
+      border-radius: var(--radius); font-size: 0.88rem;
+      font-family: 'Inter', sans-serif; outline: none;
+      transition: border-color 0.2s;
+    }
+    .controls input:focus,
+    .controls select:focus { border-color: var(--accent); }
+    .controls .spacer { flex: 1; }
+
+    .btn {
+      padding: 9px 20px; border: none; border-radius: var(--radius);
+      font-size: 0.88rem; font-family: 'Inter', sans-serif;
+      font-weight: 600; cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s; white-space: nowrap;
+    }
+    .btn:hover  { opacity: 0.88; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-save    { background: #22c55e; color: #fff; }
+    .btn-cancel  { background: #f1f3f5; color: var(--text); border: 1px solid var(--border); }
+    .btn-danger  { background: var(--danger); color: #fff; font-size: 0.78rem; padding: 5px 11px; border-radius: 7px; }
+    .btn-edit    { background: var(--warn);   color: #fff; font-size: 0.78rem; padding: 5px 11px; border-radius: 7px; }
+    .btn-slip    { background: var(--accent); color: #fff; font-size: 0.78rem; padding: 5px 11px; border-radius: 7px; }
+
+    .table-wrap { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    thead { background: var(--table-hd); }
+    thead th {
+      padding: 13px 16px; text-align: left;
+      font-size: 0.82rem; font-weight: 600; color: var(--muted);
+    }
+    tbody tr { border-top: 1px solid var(--border); transition: background 0.15s; }
+    tbody tr:hover { background: var(--row-hover); }
+    tbody td { padding: 13px 16px; vertical-align: middle; color: var(--text); }
+    .emp-id { font-weight: 600; color: #334155; }
+    .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .total-row { background: var(--total-bg) !important; }
+    .total-row td { border-top: 2px solid var(--border) !important; font-weight: 600; }
+
+    .loading-row td { text-align: center; padding: 30px; color: var(--muted); font-size: 0.9rem; }
+
+    .modal-bg {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 200;
+      align-items: center; justify-content: center;
+    }
+    .modal-bg.open { display: flex; }
+
+    .modal-box {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px 30px;
+      width: 420px; max-width: 95vw;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .modal-box h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; color: var(--text); }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block; font-size: 0.78rem; font-weight: 600;
+      color: var(--muted); margin-bottom: 5px;
+      text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%; background: #f8fafc; border: 1px solid var(--border);
+      color: var(--text); padding: 9px 12px; border-radius: 8px;
+      font-size: 0.9rem; font-family: 'Inter', sans-serif;
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus { border-color: var(--accent); background: #fff; }
+    .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+    .slip-box {
+      background: #1e2235; border-radius: 20px;
+      padding: 32px 28px; width: 360px; max-width: 95vw;
+      text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .slip-check {
+      width: 52px; height: 52px;
+      background: #22c55e22; border: 2px solid #22c55e;
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      margin: 0 auto 14px; font-size: 1.3rem; color: #22c55e;
+    }
+    .slip-title  { font-size: 0.88rem; color: #94a3b8; margin-bottom: 6px; }
+    .slip-amount { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .slip-party  { font-size: 1.5rem; margin-bottom: 18px; }
+    .slip-divider { border: none; border-top: 1px dashed #2e3a55; margin: 14px 0; }
+    .slip-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.87rem; padding: 5px 0; color: #cbd5e1;
+    }
+    .slip-row span:first-child { color: #64748b; }
+    .slip-row.bold { font-weight: 600; color: #fff; }
+    .slip-row.bold span:first-child { color: #94a3b8; }
+    .slip-pdf {
+      margin-top: 20px; width: 100%; padding: 11px;
+      border-radius: 8px; background: transparent;
+      border: 1px solid #2e3a55; color: #94a3b8;
+      font-size: 0.85rem; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .slip-pdf:hover { border-color: var(--accent); color: var(--accent); }
+    .slip-close {
+      margin-top: 8px; width: 100%; padding: 11px;
+      border-radius: 8px; background: #2a3148;
+      border: 1px solid #2e3a55; color: #cbd5e1;
+      font-size: 0.85rem; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+    }
+    .slip-close:hover { background: #323b58; }
+
+    .toast {
+      position: fixed; bottom: 28px; right: 28px;
+      background: #22c55e; color: #fff;
+      padding: 12px 20px; border-radius: 10px;
+      font-size: 0.88rem; font-weight: 600;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      transform: translateY(80px); opacity: 0;
+      transition: all 0.3s; z-index: 999;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.red  { background: var(--danger); }
+  </style>
+</head>
+<body>
+<a href="../../index.php" style="position:fixed;top:14px;left:14px;z-index:9999;background:#1d4ed8;color:#fff;padding:8px 14px;border-radius:8px;font-family:sans-serif;font-size:14px;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.25);">⬅ Dashboard</a>
+<div class="page">
+
+  <h1>Pay Roll</h1>
+
+  <div class="controls">
+    <input type="month" id="monthFilter" value="2026-05" onchange="loadEmployees()" />
+    <select id="deptFilter" onchange="loadEmployees()">
+      <option value="">All Department</option>
+      <option value="Engineering">Engineering</option>
+      <option value="HR">HR</option>
+      <option value="Finance">Finance</option>
+      <option value="Marketing">Marketing</option>
+    </select>
+    <div class="spacer"></div>
+    <button class="btn btn-primary" onclick="openAddModal()">+ Salary Slip</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Name</th><th>Department</th>
+          <th>Basic Salary</th><th>Bonus</th><th>Deduction</th>
+          <th>Net Salary</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr class="loading-row"><td colspan="8">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="modal-bg" id="formModal">
+  <div class="modal-box">
+    <h2 id="formTitle">Add Employee</h2>
+    <div class="form-group">
+      <label>Employee ID</label>
+      <input type="text" id="fId" placeholder="EMP001" />
+    </div>
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" id="fName" placeholder="Full name" />
+    </div>
+    <div class="form-group">
+      <label>Department</label>
+      <select id="fDept">
+        <option>Engineering</option><option>HR</option>
+        <option>Finance</option><option>Marketing</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Basic Salary (Rs.)</label>
+      <input type="number" id="fBasic" placeholder="60000" />
+    </div>
+    <div class="form-group">
+      <label>Bonus (Rs.)</label>
+      <input type="number" id="fBonus" placeholder="5000" />
+    </div>
+    <div class="form-group">
+      <label>Deduction (Rs.)</label>
+      <input type="number" id="fDeduct" placeholder="3000" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeFormModal()">Cancel</button>
+      <button class="btn btn-save"   onclick="saveEmployee()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- SALARY SLIP MODAL -->
+<div class="modal-bg" id="slipModal">
+  <div class="slip-box">
+    <div class="slip-check">✓</div>
+    <div class="slip-title">salary credited successfully</div>
+    <div class="slip-amount" id="sNetAmt"></div>
+    <div class="slip-party">🎉</div>
+    <hr class="slip-divider" />
+    <div class="slip-row"><span>Emp ID</span>      <span id="sId"></span></div>
+    <div class="slip-row"><span>Name</span>        <span id="sName"></span></div>
+    <div class="slip-row"><span>Basic Salary</span><span id="sBasic"></span></div>
+    <div class="slip-row"><span>Bonus</span>       <span id="sBonus"></span></div>
+    <hr class="slip-divider" />
+    <div class="slip-row"><span>Deduction</span>   <span id="sDeduct"></span></div>
+    <div class="slip-row bold"><span>Net Salary</span><span id="sNet"></span></div>
+    <button class="slip-pdf"   onclick="window.print()">⬇ Get PDF Receipt</button>
+    <button class="slip-close" onclick="closeSlip()">Close</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = "api.php";
+
+  function loadEmployees() {
+    const dept = document.getElementById('deptFilter').value;
+    let url = API + "?action=getAll";
+    if (dept) url += "&dept=" + dept;
+
+    fetch(url)
+      .then(function(res) { return res.json(); })
+      .then(function(employees) { renderTable(employees); })
+      .catch(function() { showToast('Cannot connect to server!', true); });
+  }
+
+  function renderTable(employees) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    var totalBasic = 0, totalBonus = 0, totalDeduct = 0, totalNet = 0;
+
+    employees.forEach(function(emp) {
+      var basic  = parseInt(emp.basic);
+      var bonus  = parseInt(emp.bonus);
+      var deduct = parseInt(emp.deduct);
+      var net    = basic + bonus - deduct;
+
+      totalBasic  += basic;
+      totalBonus  += bonus;
+      totalDeduct += deduct;
+      totalNet    += net;
+
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td class="emp-id">' + emp.id + '</td>' +
+        '<td>' + emp.name + '</td>' +
+        '<td>' + emp.dept + '</td>' +
+        '<td>Rs. ' + basic.toLocaleString() + '</td>' +
+        '<td>Rs. ' + bonus.toLocaleString() + '</td>' +
+        '<td>Rs. ' + deduct.toLocaleString() + '</td>' +
+        '<td>Rs. ' + net.toLocaleString() + '</td>' +
+        '<td><div class="actions">' +
+          '<button class="btn btn-slip"   onclick="openSlip(\'' + emp.id + '\')">Slip</button>' +
+          '<button class="btn btn-edit"   onclick="openEditModal(\'' + emp.id + '\')">Edit</button>' +
+          '<button class="btn btn-danger" onclick="deleteEmployee(\'' + emp.id + '\')">Delete</button>' +
+        '</div></td>';
+      tbody.appendChild(tr);
+    });
+
+    var totalTr = document.createElement('tr');
+    totalTr.className = 'total-row';
+    totalTr.innerHTML =
+      '<td colspan="2">Total Employee: <strong>' + employees.length + '</strong></td>' +
+      '<td></td>' +
+      '<td>Rs. ' + totalBasic.toLocaleString() + '</td>' +
+      '<td>Rs. ' + totalBonus.toLocaleString() + '</td>' +
+      '<td>Rs. ' + totalDeduct.toLocaleString() + '</td>' +
+      '<td>Rs. ' + totalNet.toLocaleString() + '</td>' +
+      '<td></td>';
+    tbody.appendChild(totalTr);
+  }
+
+  var editingId = null;
+
+  function openAddModal() {
+    editingId = null;
+    document.getElementById('formTitle').textContent = 'Add Employee';
+    document.getElementById('fId').value    = '';
+    document.getElementById('fName').value  = '';
+    document.getElementById('fBasic').value = '';
+    document.getElementById('fBonus').value = '';
+    document.getElementById('fDeduct').value = '';
+    document.getElementById('fId').disabled = false;
+    document.getElementById('formModal').classList.add('open');
+  }
+
+  function closeFormModal() {
+    document.getElementById('formModal').classList.remove('open');
+  }
+
+  function saveEmployee() {
+    var id     = document.getElementById('fId').value.trim();
+    var name   = document.getElementById('fName').value.trim();
+    var dept   = document.getElementById('fDept').value;
+    var basic  = parseInt(document.getElementById('fBasic').value)  || 0;
+    var bonus  = parseInt(document.getElementById('fBonus').value)  || 0;
+    var deduct = parseInt(document.getElementById('fDeduct').value) || 0;
+
+    if (!id || !name) {
+      showToast('ID and Name are required!', true);
+      return;
+    }
+
+    var action = editingId ? 'update' : 'add';
+
+    fetch(API + "?action=" + action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: id, name: name, dept: dept, basic: basic, bonus: bonus, deduct: deduct })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(result) {
+      if (result.success) {
+        showToast(editingId ? 'Employee updated ✓' : 'Employee added ✓');
+        closeFormModal();
+        loadEmployees();
+      } else {
+        showToast(result.message || 'Error!', true);
+      }
+    })
+    .catch(function() { showToast('Server error!', true); });
+  }
+
+  function openEditModal(empId) {
+    fetch(API + "?action=getAll")
+      .then(function(res) { return res.json(); })
+      .then(function(employees) {
+        var emp = null;
+        for (var i = 0; i < employees.length; i++) {
+          if (employees[i].id === empId) { emp = employees[i]; break; }
+        }
+        if (!emp) return;
+
+        editingId = empId;
+        document.getElementById('formTitle').textContent = 'Edit Employee';
+        document.getElementById('fId').value     = emp.id;
+        document.getElementById('fId').disabled  = true;
+        document.getElementById('fName').value   = emp.name;
+        document.getElementById('fDept').value   = emp.dept;
+        document.getElementById('fBasic').value  = emp.basic;
+        document.getElementById('fBonus').value  = emp.bonus;
+        document.getElementById('fDeduct').value = emp.deduct;
+        document.getElementById('formModal').classList.add('open');
+      });
+  }
+
+  function deleteEmployee(empId) {
+    if (!confirm('Delete employee ' + empId + '?')) return;
+
+    fetch(API + "?action=delete&id=" + empId)
+      .then(function(res) { return res.json(); })
+      .then(function(result) {
+        if (result.success) {
+          showToast('Employee deleted', true);
+          loadEmployees();
+        } else {
+          showToast('Delete failed!', true);
+        }
+      });
+  }
+
+  function openSlip(empId) {
+    fetch(API + "?action=getAll")
+      .then(function(res) { return res.json(); })
+      .then(function(employees) {
+        var emp = null;
+        for (var i = 0; i < employees.length; i++) {
+          if (employees[i].id === empId) { emp = employees[i]; break; }
+        }
+        if (!emp) return;
+
+        var basic  = parseInt(emp.basic);
+        var bonus  = parseInt(emp.bonus);
+        var deduct = parseInt(emp.deduct);
+        var net    = basic + bonus - deduct;
+
+        document.getElementById('sNetAmt').textContent = 'LKR ' + net.toLocaleString();
+        document.getElementById('sId').textContent     = emp.id;
+        document.getElementById('sName').textContent   = emp.name;
+        document.getElementById('sBasic').textContent  = 'LKR ' + basic.toLocaleString();
+        document.getElementById('sBonus').textContent  = 'LKR ' + bonus.toLocaleString();
+        document.getElementById('sDeduct').textContent = 'LKR ' + deduct.toLocaleString();
+        document.getElementById('sNet').textContent    = 'LKR ' + net.toLocaleString();
+
+        document.getElementById('slipModal').classList.add('open');
+      });
+  }
+
+  function closeSlip() {
+    document.getElementById('slipModal').classList.remove('open');
+  }
+
+  function showToast(msg, isRed) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isRed ? ' red' : '');
+    void t.offsetWidth;
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 2800);
+  }
+
+  document.getElementById('formModal').addEventListener('click', function(e) {
+    if (e.target === e.currentTarget) closeFormModal();
+  });
+  document.getElementById('slipModal').addEventListener('click', function(e) {
+    if (e.target === e.currentTarget) closeSlip();
+  });
+
+  loadEmployees();
+</script>
+</body>
+</html>
