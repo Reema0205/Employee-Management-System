@@ -26,7 +26,7 @@ $company = $_SESSION['company'] ?? ['name' => 'Company'];
       <i class="fa-solid fa-right-from-bracket"></i>
     </div>
     <h1>Sign Out</h1>
-    <p>Are you sure you want to sign out of <strong><?= htmlspecialchars($company['name']) ?></strong>'s account?</p>
+    <p> Are you sure you want to sign out of <strong><?= htmlspecialchars($company['name']) ?></strong>'s account?</p>
     <div class="buttons">
       <button class="cancel-btn" onclick="history.back()">
         <i class="fa-solid fa-arrow-left"></i> Go Back

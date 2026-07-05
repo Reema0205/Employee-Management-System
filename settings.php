@@ -126,7 +126,7 @@ $pageTitle  = 'Settings';
           <div class="settings-fields">
             <div class="form-group">
               <label><i class="fa-solid fa-building"></i> Company Name</label>
-              <input type="text" name="name" value="<?= htmlspecialchars($company['name'] ?? '') ?>" required>
+              <input type="text" name= "name" value="<?= htmlspecialchars($company['name'] ?? '') ?>" required>
             </div>
             <div class="form-group">
               <label><i class="fa-regular fa-envelope"></i> Username / Email</label>

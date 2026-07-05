@@ -82,7 +82,7 @@ $pageTitle  = 'Dashboard';
           <div class="card-body">
             <h3>Jobs Posted</h3>
             <h2><?= $stats['jobs_posted'] ?></h2>
-            <p>Active jobs</p>
+            <p> Active jobs</p>
           </div>
         </div>
         <div class="card card-green">

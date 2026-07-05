@@ -55,7 +55,7 @@ $pageTitle  = 'Post a Job';
           <i class="fa-solid fa-briefcase"></i>
           <div>
             <h2>Post a New Job</h2>
-            <p>Fill in the details below to publish your job listing.</p>
+            <p> Fill in the details below to publish your job listing.</p>
           </div>
         </div>
 

@@ -146,7 +146,7 @@ $colorMap= ['Full Time'=>'blue','Internship'=>'green','Part Time'=>'purple','Rem
       <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px;">Skills</label>
       <input id="editSkills" style="width:100%;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;outline:none;">
     </div>
-    <div style="display:flex;gap:12px;justify-content:flex-end;">
+    <div style ="display:flex;gap:12px;justify-content:flex-end;">
       <button onclick="closeEdit()" style="padding:10px 22px;border:1.5px solid #e5e7eb;border-radius:8px;background:#fff;cursor:pointer;font-size:14px;">Cancel</button>
       <button onclick="saveEdit()" style="padding:10px 22px;background:#18b65a;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">Save Changes</button>
     </div>
